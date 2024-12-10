@@ -341,13 +341,13 @@ public class User extends javax.swing.JFrame {
                             .addGroup(displayTotalLayout.createSequentialGroup()
                                 .addGap(54, 54, 54)
                                 .addComponent(Bcover, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(21, 21, 21)
+                        .addGap(28, 28, 28)
                         .addComponent(jButton1)
                         .addGap(30, 30, 30)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(52, 52, 52)
                         .addComponent(jButton2)))
-                .addContainerGap(174, Short.MAX_VALUE))
+                .addContainerGap(185, Short.MAX_VALUE))
             .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, displayTotalLayout.createSequentialGroup()
                     .addContainerGap(515, Short.MAX_VALUE)
@@ -603,7 +603,7 @@ public class User extends javax.swing.JFrame {
     private void BayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BayarActionPerformed
 
         prosesPembayaran();
-
+        
     }//GEN-LAST:event_BayarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
