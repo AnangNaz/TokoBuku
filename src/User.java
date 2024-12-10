@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.sql.DriverManager;
 import java.io.File;
 import java.io.FileWriter;
 import javax.swing.JFileChooser;
@@ -28,7 +27,7 @@ public class User extends javax.swing.JFrame {
         con = DB.con;
         stat = DB.stm;
         tampildata();
-//        updateBookStock(bookId, newQuantity);
+        user();
     }
 
     /**
@@ -38,8 +37,45 @@ public class User extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
 
+    public void setUserName(String userName) {
+        Nama.setText(userName);
+    }
+
+    void user() {
+        String sql = "SELECT Nama FROM register WHERE id = ?";
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, Key); // Pastikan Key adalah ID pengguna yang valid
+
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                // Ambil nama dari ResultSet
+                String namaUser = rs.getString("Nama");
+                // Set nama ke komponen GUI
+                Nama.setText(namaUser);
+            } else {
+                System.out.println("Data tidak ditemukan.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     void tampildata() {
-        // Pastikan tblData adalah objek JTable yang sudah ada
         DefaultTableModel tbl = new DefaultTableModel();
 
         // Menetapkan kolom untuk tabel
@@ -54,8 +90,7 @@ public class User extends javax.swing.JFrame {
             stat = con.createStatement();
             rs = stat.executeQuery(sql);
 
-            // Mengosongkan tabel sebelum menampilkan data baru
-            tbl.setRowCount(0); // Kosongkan model tabel
+            tbl.setRowCount(0);
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -68,8 +103,8 @@ public class User extends javax.swing.JFrame {
                 tbl.addRow(new Object[]{id, judulBuku, author, harga, quantity});
             }
 
-            // Mengaitkan model dengan JTable
-            tblData.setModel(tbl); // Pastikan tblData adalah objek JTable yang sudah ada
+            tblData.setModel(tbl);
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
         }
@@ -104,8 +139,10 @@ public class User extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         total = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        totalArea = new javax.swing.JTextArea();
+        jLabel11 = new javax.swing.JLabel();
+        Nama = new javax.swing.JLabel();
+        displayTotal2 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,6 +152,7 @@ public class User extends javax.swing.JFrame {
 
         jLabel1.setText("Harga");
 
+        txtjudulBuku.setEditable(false);
         txtjudulBuku.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtjudulBukuActionPerformed(evt);
@@ -128,6 +166,7 @@ public class User extends javax.swing.JFrame {
 
         jLabel2.setText("Author");
 
+        txtHarga.setEditable(false);
         txtHarga.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtHargaActionPerformed(evt);
@@ -136,6 +175,7 @@ public class User extends javax.swing.JFrame {
 
         jLabel3.setText("Judul Buku");
 
+        txtAuthor.setEditable(false);
         txtAuthor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtAuthorActionPerformed(evt);
@@ -172,6 +212,7 @@ public class User extends javax.swing.JFrame {
 
         jLabel6.setText("id");
 
+        txtId.setEditable(false);
         txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdActionPerformed(evt);
@@ -237,9 +278,18 @@ public class User extends javax.swing.JFrame {
             }
         });
 
-        totalArea.setColumns(20);
-        totalArea.setRows(5);
-        jScrollPane3.setViewportView(totalArea);
+        jLabel11.setText("Halo selamat datang, ");
+
+        Nama.setText("jLabel12");
+
+        displayTotal2.setEditable(false);
+
+        jButton4.setText("Log Out");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout displayTotalLayout = new javax.swing.GroupLayout(displayTotal);
         displayTotal.setLayout(displayTotalLayout);
@@ -253,7 +303,7 @@ public class User extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel1)
                             .addComponent(jLabel6))
-                        .addGap(28, 28, 28)
+                        .addGap(22, 22, 22)
                         .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel7)
@@ -261,6 +311,10 @@ public class User extends javax.swing.JFrame {
                     .addGroup(displayTotalLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel5)
+                        .addGap(156, 156, 156)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Nama)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, displayTotalLayout.createSequentialGroup()
@@ -289,7 +343,9 @@ public class User extends javax.swing.JFrame {
                     .addGroup(displayTotalLayout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                 .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, displayTotalLayout.createSequentialGroup()
@@ -297,17 +353,18 @@ public class User extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(displayTotalLayout.createSequentialGroup()
                         .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18)
+                        .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(displayTotal2)
+                            .addComponent(txtBayar, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                        .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(displayTotalLayout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(Bayar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(displayTotalLayout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, displayTotalLayout.createSequentialGroup()
+                                .addGap(70, 70, 70)
                                 .addComponent(total)))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -329,9 +386,9 @@ public class User extends javax.swing.JFrame {
                         .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel8)
-                                .addComponent(total))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(displayTotal2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(total))
+                        .addGap(28, 28, 28)
                         .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10)
@@ -340,7 +397,10 @@ public class User extends javax.swing.JFrame {
                         .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(displayTotalLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel5)
+                                .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel11)
+                                    .addComponent(Nama))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel6)
@@ -367,7 +427,8 @@ public class User extends javax.swing.JFrame {
                         .addGap(52, 52, 52)
                         .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
-                            .addComponent(jButton3))))
+                            .addComponent(jButton3)
+                            .addComponent(jButton4))))
                 .addContainerGap(183, Short.MAX_VALUE))
             .addGroup(displayTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, displayTotalLayout.createSequentialGroup()
@@ -528,10 +589,10 @@ public class User extends javax.swing.JFrame {
 
         int totalPrice = quantity * harga;
         totalHargaKeseluruhan += totalPrice;
-        totalArea.setText(String.valueOf(totalHargaKeseluruhan));
+        displayTotal2.setText(String.valueOf(totalHargaKeseluruhan));
     }
 
-    private void updateBookStock(String bookId, int newQuantity) {
+    void updateBookStock(String bookId, int newQuantity) {
         String sql = "UPDATE buku SET Quantity = ? WHERE id = ?";
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setInt(1, newQuantity);
@@ -585,7 +646,7 @@ public class User extends javax.swing.JFrame {
     }
 
     public String getDisplayTotal2Value() {
-        return totalArea.getText();
+        return displayTotal2.getText();
     }
 
 
@@ -594,12 +655,12 @@ public class User extends javax.swing.JFrame {
     }//GEN-LAST:event_billDataMouseClicked
 
     void prosesPembayaran() {
-        if (totalArea == null || totalArea.getText().isEmpty()) {
+        if (displayTotal2 == null || displayTotal2.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Total belum terisi. Silakan hitung total terlebih dahulu.");
             return;
         }
 
-        int totalHarga = Integer.parseInt(totalArea.getText());
+        int totalHarga = Integer.parseInt(displayTotal2.getText());
 
         String bayarText = txtBayar.getText().trim();
         int bayar;
@@ -659,11 +720,10 @@ public class User extends javax.swing.JFrame {
             }
         }
 
-
         txtBayar.setText("");
         BillTableModel.setRowCount(0);
-        totalHargaKeseluruhan = 0; 
-        totalArea.setText("0"); 
+        totalHargaKeseluruhan = 0;
+        displayTotal2.setText("0");
     }
 
     void exportExcel() {
@@ -718,8 +778,13 @@ public class User extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtIdActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        this.dispose();
+        new Login().setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -756,13 +821,17 @@ public class User extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Bayar;
     private javax.swing.JLabel Bcover;
+    private javax.swing.JLabel Nama;
     private javax.swing.JTable billData;
     private keeptoo.KGradientPanel displayTotal;
+    private javax.swing.JTextField displayTotal2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -773,10 +842,8 @@ public class User extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblData;
     private javax.swing.JLabel total;
-    private javax.swing.JTextArea totalArea;
     private javax.swing.JTextField txtAuthor;
     private javax.swing.JTextField txtBayar;
     private javax.swing.JTextField txtHarga;

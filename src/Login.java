@@ -1,4 +1,6 @@
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -38,6 +40,7 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         Login = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,10 +82,23 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Lupa Password");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout kGradientPanel1Layout = new javax.swing.GroupLayout(kGradientPanel1);
         kGradientPanel1.setLayout(kGradientPanel1Layout);
         kGradientPanel1Layout.setHorizontalGroup(
             kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, kGradientPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(192, 192, 192))
             .addGroup(kGradientPanel1Layout.createSequentialGroup()
                 .addGap(118, 118, 118)
                 .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,11 +114,9 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(txtPassword))
                 .addContainerGap(78, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, kGradientPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(192, 192, 192))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(107, 107, 107))
             .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(kGradientPanel1Layout.createSequentialGroup()
                     .addGap(120, 120, 120)
@@ -129,7 +143,9 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(Login))
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addContainerGap(40, Short.MAX_VALUE))
             .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(kGradientPanel1Layout.createSequentialGroup()
                     .addGap(42, 42, 42)
@@ -157,47 +173,35 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-//        try {
-//            String sql = "SELECT * FROM register where Nama =' " + txtNama.getText()
-//                    + "' AND Password =' " + txtPassword.getText() + "'";
-////            String sql = "SELECT * FROM register where Nama = "txtNama" and Password "txtPassword"";
-//
-//            java.sql.PreparedStatement pst = con.prepareStatement(sql);
-//            java.sql.ResultSet rs = pst.executeQuery(sql);
-//            if (rs.next()) {    
-//                if (txtNama.getText().equals(rs.getString("Nama"))
-//                        && txtPassword.getText().equals(rs.getString("Password"))) {
-//                    JOptionPane.showMessageDialog(null, "Anda berhasil Login");
-//                    this.setVisible(false);
-//                    new Register().setVisible(true);
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Nama atau Password anda salah");
-//            }
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(this, e.getMessage());
-//        }
-//        System.out.println(txtNama.getText());
-//        System.out.println(txtPassword.getText());
-//        System.out.println(sql);
         try {
-            String sql = "SELECT * FROM register WHERE Nama = ? AND Password = ?";
+            String sql = "SELECT id, Nama FROM register WHERE Nama = ? AND Password = ?";
             java.sql.PreparedStatement pst = con.prepareStatement(sql);
 
             // Setting parameters
             pst.setString(1, txtNama.getText());
-            pst.setString(2, txtPassword.getText());
+            String hashedPassword = hashPassword(txtPassword.getText()); // Enkripsi password
+            pst.setString(2, hashedPassword); // Gunakan password yang di-hash
 
             java.sql.ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
+                // Ambil ID pengguna
+                int Key = rs.getInt("id");
+
+                // Ambil nama pengguna
+                String userName = rs.getString("Nama"); // Ambil nama dari ResultSet
+
+                // Cek apakah pengguna adalah admin
                 if (txtNama.getText().equals("admin")) {
                     this.dispose();
                     new admin().setVisible(true);
                     JOptionPane.showMessageDialog(null, "Anda berhasil Login");
                 } else {
+                    User userFrame = new User(); // Buat instans baru dari User
+                    userFrame.setUserName(userName
+                    ); // Set nama pengguna
+                userFrame.setVisible(true); // Tampilkan frame User
                     this.dispose();
-                    new User().setVisible(true);
                     JOptionPane.showMessageDialog(null, "Anda berhasil Login");
                 }
             } else {
@@ -208,9 +212,31 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_LoginActionPerformed
 
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+
+            // Mengonversi byte array ke string heksadesimal
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.dispose();
+        new LupaPassword().setVisible(true); // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,6 +276,7 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Login;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
