@@ -388,20 +388,7 @@ public class admin extends javax.swing.JFrame {
         txtHarga.setText("");
         txtQuantity.setText("");
     }
-    
-//    private void GetBookCover() {
-//        String sql = "select Gambar from buku where id= " + Key;
-//        Statement St;
-//        ResultSet Rs;
-//        try {
-//           St = con.createStatement();
-//           Rs = St.executeQuery(sql);
-//            if (Rs.next()) {
-//            Bcover.setIcon(ResizeCover(null, Rs.getBytes("Gambar")));
-//         }
-//        } catch (Exception e) {
-//        }
-//    }
+
     private void GetBookCover() {
     String sql = "SELECT Gambar FROM buku WHERE id = ?";
     PreparedStatement pst = null;

@@ -2,6 +2,9 @@
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.sql.SQLException;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,65 +27,66 @@ public class History extends javax.swing.JFrame {
         DB.config();
         con = DB.con;
         stat = DB.stm;
+        tampildata();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         kGradientPanel1 = new keeptoo.KGradientPanel();
-        txtJb = new javax.swing.JLabel();
-        txtAuthor = new javax.swing.JLabel();
-        txtHarga = new javax.swing.JLabel();
-        txtQuantity = new javax.swing.JLabel();
-        Bcover = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblData = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         kGradientPanel1.setkEndColor(new java.awt.Color(122, 183, 255));
         kGradientPanel1.setkStartColor(new java.awt.Color(21, 83, 161));
 
-        txtJb.setText("jLabel1");
-
-        txtAuthor.setText("jLabel1");
-
-        txtHarga.setText("jLabel1");
-
-        txtQuantity.setText("jLabel1");
-
-        Bcover.setText("jLabel1");
-
         jLabel1.setText("Halaman History");
 
         jLabel5.setFont(new java.awt.Font("Viner Hand ITC", 0, 12)); // NOI18N
         jLabel5.setText("Iswa Book Store");
+
+        tblData.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Judul Buku", "Author", "Harga", "Quantity", "Jumlah bayar"
+            }
+        ));
+        jScrollPane2.setViewportView(tblData);
+
+        jButton1.setText("Home Page");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout kGradientPanel1Layout = new javax.swing.GroupLayout(kGradientPanel1);
         kGradientPanel1.setLayout(kGradientPanel1Layout);
         kGradientPanel1Layout.setHorizontalGroup(
             kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(kGradientPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(116, 116, 116)
+                .addComponent(jLabel1)
+                .addContainerGap(204, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, kGradientPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(kGradientPanel1Layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addComponent(txtJb)
-                        .addGap(45, 45, 45)
-                        .addComponent(txtAuthor)
-                        .addGap(39, 39, 39)
-                        .addComponent(txtHarga)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtQuantity)
-                        .addGap(66, 66, 66)
-                        .addComponent(Bcover, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(kGradientPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel5)
-                        .addGap(116, 116, 116)
-                        .addComponent(jLabel1)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                    .addComponent(jButton1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23))
         );
         kGradientPanel1Layout.setVerticalGroup(
             kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,14 +95,11 @@ public class History extends javax.swing.JFrame {
                 .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtJb)
-                    .addComponent(txtAuthor)
-                    .addComponent(txtHarga)
-                    .addComponent(txtQuantity)
-                    .addComponent(Bcover, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(177, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -116,6 +117,46 @@ public class History extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+        new User().setVisible(true);           // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+    void tampildata() {
+        // Pastikan tblData adalah objek JTable yang sudah ada
+        DefaultTableModel tbl = new DefaultTableModel();
+
+        // Menetapkan kolom untuk tabel
+        tbl.addColumn("Judul Buku");
+        tbl.addColumn("Author");
+        tbl.addColumn("Harga");
+        tbl.addColumn("Quantity");
+        tbl.addColumn("Jumlah Bayar");
+
+        try {
+            String sql = "SELECT * FROM transaksi";
+            stat = con.createStatement();
+            rs = stat.executeQuery(sql);
+
+            tbl.setRowCount(0); // Kosongkan model tabel
+
+            while (rs.next()) {
+                String judulBuku = rs.getString("judulBuku");
+                String author = rs.getString("Author");
+                int harga = rs.getInt("Harga");
+                int quantity = rs.getInt("Quantity");
+                int jumlahbayar = rs.getInt("jumlahBayar");
+
+                // Menambahkan baris ke model tabel
+                tbl.addRow(new Object[]{judulBuku, author, harga, quantity, jumlahbayar});
+            }
+
+            // Mengaitkan model dengan JTable
+            tblData.setModel(tbl); // Pastikan tblData adalah objek JTable yang sudah ada
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -153,13 +194,11 @@ public class History extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Bcover;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane2;
     private keeptoo.KGradientPanel kGradientPanel1;
-    private javax.swing.JLabel txtAuthor;
-    private javax.swing.JLabel txtHarga;
-    private javax.swing.JLabel txtJb;
-    private javax.swing.JLabel txtQuantity;
+    private javax.swing.JTable tblData;
     // End of variables declaration//GEN-END:variables
 }
