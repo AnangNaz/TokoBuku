@@ -5,28 +5,30 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-/**
- *
- * @author Anang
- */
 public class History extends javax.swing.JFrame {
 
     Connection con;
     Statement stat;
     ResultSet rs;
     String sql;
+    private int userId;
 
     public History() {
+
         initComponents();
         database DB = new database();
         DB.config();
         con = DB.con;
         stat = DB.stm;
+        tampildata();
+      
+    }
+    
+    public void setHistoryId(int userId) {
+        this.userId = userId;
+        System.out.println(userId);
         tampildata();
     }
 
@@ -133,28 +135,33 @@ public class History extends javax.swing.JFrame {
         tbl.addColumn("Quantity");
         tbl.addColumn("Jumlah Bayar");
 
-        try {
-            String sql = "SELECT * FROM transaksi";
-            stat = con.createStatement();
-            rs = stat.executeQuery(sql);
+        // Menggunakan userId untuk memfilter transaksi
+        String sql = "SELECT * FROM transaksi WHERE userId = ?";
 
-            tbl.setRowCount(0); // Kosongkan model tabel
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setInt(1, userId); // Mengatur userId yang sedang login
+            System.out.println("User  ID: " + userId); // Debugging
 
-            while (rs.next()) {
-                String judulBuku = rs.getString("judulBuku");
-                String author = rs.getString("Author");
-                int harga = rs.getInt("Harga");
-                int quantity = rs.getInt("Quantity");
-                int jumlahbayar = rs.getInt("jumlahBayar");
+            try (ResultSet rs = pst.executeQuery()) {
+                tbl.setRowCount(0); // Kosongkan model tabel
 
-                // Menambahkan baris ke model tabel
-                tbl.addRow(new Object[]{judulBuku, author, harga, quantity, jumlahbayar});
+                while (rs.next()) {
+                    String judulBuku = rs.getString("judulBuku");
+                    String author = rs.getString("Author");
+                    int harga = rs.getInt("Harga");
+                    int quantity = rs.getInt("Quantity");
+                    int jumlahbayar = rs.getInt("jumlahBayar");
+
+                    // Menambahkan baris ke model tabel
+                    tbl.addRow(new Object[]{judulBuku, author, harga, quantity, jumlahbayar});
+                }
             }
 
             // Mengaitkan model dengan JTable
             tblData.setModel(tbl); // Pastikan tblData adalah objek JTable yang sudah ada
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error saat mengambil data: " + e.getMessage());
+            e.printStackTrace(); // Untuk debugging
         }
     }
 
@@ -188,7 +195,7 @@ public class History extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new History().setVisible(true);
+
             }
         });
     }

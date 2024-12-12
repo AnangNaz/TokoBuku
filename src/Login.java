@@ -186,7 +186,7 @@ public class Login extends javax.swing.JFrame {
 
             if (rs.next()) {
                 // Ambil ID pengguna
-                int Key = rs.getInt("id");
+                int userId = rs.getInt("id");
 
                 // Ambil nama pengguna
                 String userName = rs.getString("Nama"); // Ambil nama dari ResultSet
@@ -197,10 +197,13 @@ public class Login extends javax.swing.JFrame {
                     new admin().setVisible(true);
                     JOptionPane.showMessageDialog(null, "Anda berhasil Login");
                 } else {
-                    User userFrame = new User(); // Buat instans baru dari User
+                    User userFrame = new User();
+                    History historyFrame = new History();
+                    historyFrame.setHistoryId(userId);// Buat instans baru dari User
                     userFrame.setUserName(userName
                     ); // Set nama pengguna
-                userFrame.setVisible(true); // Tampilkan frame User
+                    userFrame.setUserId(userId); // Set user id
+                    userFrame.setVisible(true); // Tampilkan frame User
                     this.dispose();
                     JOptionPane.showMessageDialog(null, "Anda berhasil Login");
                 }

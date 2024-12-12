@@ -19,6 +19,7 @@ public class User extends javax.swing.JFrame {
     Statement stat;
     ResultSet rs;
     String sql;
+    private int userId;
 
     public User() {
         initComponents();
@@ -39,6 +40,20 @@ public class User extends javax.swing.JFrame {
 
     public void setUserName(String userName) {
         Nama.setText(userName);
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+        System.out.println("User  ID set to: " + userId);
+    }
+
+    private void openHistory() {
+        System.out.println("Opening History with User ID: " + userId);
+//        History historyFrame = new History(userId); 
+        History historyFrame = new History();
+        historyFrame.setHistoryId(userId);
+        historyFrame.setVisible(true);
+        this.dispose(); // Menutup frame User jika diperlukan
     }
 
     void user() {
@@ -603,16 +618,16 @@ public class User extends javax.swing.JFrame {
         }
     }
 
-    void saveTransactionToDatabase(String judulBuku, String author, int harga, int quantity, int total) {
-        String sql = "INSERT INTO transaksi ( judulBuku, Author, Harga, Quantity, jumlahBayar) VALUES (?, ?, ?, ?, ?)";
+    void saveTransactionToDatabase(int userId, String judulBuku, String author, int harga, int quantity, int total) {
+        String sql = "INSERT INTO transaksi (judulBuku, Author, Harga, Quantity, jumlahBayar, userId) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = con.prepareStatement(sql)) {
-
             pst.setString(1, judulBuku);
             pst.setString(2, author);
             pst.setInt(3, harga);
             pst.setInt(4, quantity);
             pst.setInt(5, total);
+            pst.setInt(6, userId); // Menyimpan userId
 
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
@@ -704,13 +719,12 @@ public class User extends javax.swing.JFrame {
             int quantity = quantityObj.intValue();
 
             // Simpan transaksi
-            saveTransactionToDatabase(judulBuku, author, harga, quantity, totalHarga);
+            saveTransactionToDatabase(userId, judulBuku, author, harga, quantity, totalHarga);
 
             // Update stok buku
             String bookId = (String) BillTableModel.getValueAt(i, 0);
             int availableQuantity = getAvailableQuantityFromDatabase(bookId);
 
-//            validasi input tidak bisa dibawah nol 
             if (availableQuantity >= quantity) {
                 int newQuantity = availableQuantity - quantity;
                 updateBookStock(bookId, newQuantity);
@@ -769,8 +783,8 @@ public class User extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBayarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        this.dispose();
-        new History().setVisible(true);                 // TODO add your handling code here:
+        openHistory();
+        System.out.println("User  ID sebelum membuka history: " + userId);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
