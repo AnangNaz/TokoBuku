@@ -49,7 +49,7 @@ public class admin extends javax.swing.JFrame {
             pst.setInt(4, Integer.parseInt(txtHarga.getText()));
             pst.setInt(5, Integer.parseInt(txtQuantity.getText()));
 
-            InputStream img = new FileInputStream(imgPath); // Pastikan imgPath valid
+            InputStream img = new FileInputStream(imgPath);
             pst.setBlob(6, img);
 
             pst.executeUpdate();
@@ -94,7 +94,7 @@ public class admin extends javax.swing.JFrame {
         System.out.println(imgPath);
         if (imgPath == null) {
             JOptionPane.showMessageDialog(this, "Please select an image before updating.");
-            return; // Hentikan eksekusi jika imgPath belum diatur
+            return;
         }
         try {
             if (con == null) {
@@ -105,23 +105,21 @@ public class admin extends javax.swing.JFrame {
             String sql = "UPDATE buku SET judulBuku = ?, Author = ?, Harga = ?, Quantity = ?, Gambar = ? WHERE id = ?";
             PreparedStatement pst = con.prepareStatement(sql);
 
-            // Cek apakah komponen teks tidak null
             if (txtjudulBuku == null || txtAuthor == null || txtHarga == null || txtQuantity == null || txtid == null) {
                 throw new IllegalStateException("Text fields are not initialized.");
             }
 
-            pst.setString(1, txtjudulBuku.getText()); // judulBuku
-            pst.setString(2, txtAuthor.getText()); // Author
-            pst.setInt(3, Integer.parseInt(txtHarga.getText())); // Harga
-            pst.setInt(4, Integer.parseInt(txtQuantity.getText())); // Quantity
+            pst.setString(1, txtjudulBuku.getText()); 
+            pst.setString(2, txtAuthor.getText());
+            pst.setInt(3, Integer.parseInt(txtHarga.getText())); 
+            pst.setInt(4, Integer.parseInt(txtQuantity.getText())); 
 
-            // Cek imgPath
             if (imgPath == null) {
                 throw new IllegalStateException("Image path is not set. Please select an image.");
             }
             InputStream img = new FileInputStream(imgPath);
-            pst.setBlob(5, img); // Gambar
-            pst.setInt(6, Integer.parseInt(txtid.getText())); // id
+            pst.setBlob(5, img); 
+            pst.setInt(6, Integer.parseInt(txtid.getText())); 
 
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
@@ -182,7 +180,8 @@ public class admin extends javax.swing.JFrame {
         kGradientPanel2.setkEndColor(new java.awt.Color(122, 183, 255));
         kGradientPanel2.setkStartColor(new java.awt.Color(21, 83, 161));
 
-        jLabel8.setFont(new java.awt.Font("Viner Hand ITC", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Viner Hand ITC", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Iswa Book Store");
 
         txtid.addActionListener(new java.awt.event.ActionListener() {
@@ -191,6 +190,7 @@ public class admin extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("id");
 
         txtjudulBuku.addActionListener(new java.awt.event.ActionListener() {
@@ -199,12 +199,16 @@ public class admin extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Judul Buku                     :");
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("  Author                         :");
 
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Harga                            :");
 
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Quantity                        :");
 
         txtAuthor.addActionListener(new java.awt.event.ActionListener() {
@@ -498,7 +502,7 @@ public class admin extends javax.swing.JFrame {
 
             String path = selectedFile.getAbsolutePath();
             Bcover.setIcon(ResizeCover(path, null));
-            imgPath = path; // Set imgPath
+            imgPath = path; 
             System.out.println(path);
         } else if (result == JFileChooser.CANCEL_OPTION) {
             JOptionPane.showMessageDialog(this, "No file selected");

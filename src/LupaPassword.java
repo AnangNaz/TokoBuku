@@ -43,19 +43,26 @@ public class LupaPassword extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JTextField();
         Login = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         kGradientPanel1.setkEndColor(new java.awt.Color(122, 183, 255));
         kGradientPanel1.setkStartColor(new java.awt.Color(21, 83, 161));
 
+        jLabel1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Halaman Lupa Password");
 
-        jLabel5.setFont(new java.awt.Font("Viner Hand ITC", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Viner Hand ITC", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Iswa Book Store");
 
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Masukkan Password lama anda    :");
 
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Masukkan Password baru anda    :");
 
         jButton1.setText("Proses");
@@ -65,12 +72,24 @@ public class LupaPassword extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Masukkan Username Anda           :");
 
-        Login.setText("Login");
+        Login.setText("Halaman Login");
         Login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LoginActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Lupa Username dan Password anda? ");
+
+        jButton2.setText("Klik disini");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -86,19 +105,25 @@ public class LupaPassword extends javax.swing.JFrame {
                         .addGap(116, 116, 116)
                         .addComponent(jLabel1))
                     .addGroup(kGradientPanel1Layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                            .addGroup(kGradientPanel1Layout.createSequentialGroup()
+                                .addGap(158, 158, 158)
+                                .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)))
+                            .addGroup(kGradientPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton2)))
                         .addGap(56, 56, 56)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(Login, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                            .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtNewPassword)
-                                .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addComponent(txtNewPassword)
+                            .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
         kGradientPanel1Layout.setVerticalGroup(
@@ -108,7 +133,7 @@ public class LupaPassword extends javax.swing.JFrame {
                 .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -120,11 +145,14 @@ public class LupaPassword extends javax.swing.JFrame {
                 .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtNewPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Login)
-                .addGap(35, 35, 35))
+                .addGap(41, 41, 41)
+                .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jButton2)
+                    .addComponent(Login))
+                .addGap(22, 22, 22))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -147,14 +175,12 @@ public class LupaPassword extends javax.swing.JFrame {
         try {
             String query = "SELECT password FROM register WHERE nama = ?";
             PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.setString(1, nama); // Menggunakan nama pengguna yang sesuai
+            pstmt.setString(1, nama);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                // Ambil password lama dari database
                 String oldPasswordFromDB = rs.getString("password");
 
-                // Enkripsi password yang diinputkan
                 String encryptedOldPassword = hashPassword(oldPassword);
                 return oldPasswordFromDB.equals(encryptedOldPassword);
             } else {
@@ -170,7 +196,7 @@ public class LupaPassword extends javax.swing.JFrame {
         try {
             String query = "UPDATE register SET password = ? WHERE nama = ?";
             PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.setString(1, hashPassword(newPassword)); // Enkripsi password baru
+            pstmt.setString(1, hashPassword(newPassword));
             pstmt.setString(2, nama);
             pstmt.executeUpdate();
             return true;
@@ -185,7 +211,6 @@ public class LupaPassword extends javax.swing.JFrame {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = md.digest(password.getBytes());
 
-            // Mengonversi byte array ke string heksadesimal
             StringBuilder sb = new StringBuilder();
             for (byte b : hashedBytes) {
                 sb.append(String.format("%02x", b));
@@ -200,7 +225,7 @@ public class LupaPassword extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String nama = txtNama.getText();
         String oldPassword = txtPassword.getText();
-        String newPassword = txtNewPassword.getText(); // Pastikan Anda memiliki field untuk password baru
+        String newPassword = txtNewPassword.getText(); 
 
         if (comparePasswords(nama, oldPassword)) {
             if (updatePassword(nama, newPassword)) {
@@ -214,9 +239,15 @@ public class LupaPassword extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-    this.dispose();
-    new Login().setVisible(true);
+        this.dispose();
+        new Login().setVisible(true);
     }//GEN-LAST:event_LoginActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.setVisible(false);
+        LupaUsername lupaUsername = new LupaUsername();
+        lupaUsername.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -256,11 +287,13 @@ public class LupaPassword extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Login;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private keeptoo.KGradientPanel kGradientPanel1;
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNewPassword;

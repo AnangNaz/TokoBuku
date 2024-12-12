@@ -1,5 +1,6 @@
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -14,6 +15,7 @@ public class History extends javax.swing.JFrame {
     ResultSet rs;
     String sql;
     private int userId;
+    
 
     public History() {
 
@@ -23,12 +25,11 @@ public class History extends javax.swing.JFrame {
         con = DB.con;
         stat = DB.stm;
         tampildata();
-      
+
     }
-    
+
     public void setHistoryId(int userId) {
         this.userId = userId;
-        System.out.println(userId);
         tampildata();
     }
 
@@ -48,9 +49,12 @@ public class History extends javax.swing.JFrame {
         kGradientPanel1.setkEndColor(new java.awt.Color(122, 183, 255));
         kGradientPanel1.setkStartColor(new java.awt.Color(21, 83, 161));
 
+        jLabel1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Halaman History");
 
-        jLabel5.setFont(new java.awt.Font("Viner Hand ITC", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Viner Hand ITC", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Iswa Book Store");
 
         tblData.setModel(new javax.swing.table.DefaultTableModel(
@@ -101,7 +105,7 @@ public class History extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -122,28 +126,22 @@ public class History extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.dispose();
-        new User().setVisible(true);           // TODO add your handling code here:
+        new User(userId).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
     void tampildata() {
-        // Pastikan tblData adalah objek JTable yang sudah ada
         DefaultTableModel tbl = new DefaultTableModel();
-
-        // Menetapkan kolom untuk tabel
         tbl.addColumn("Judul Buku");
         tbl.addColumn("Author");
         tbl.addColumn("Harga");
         tbl.addColumn("Quantity");
         tbl.addColumn("Jumlah Bayar");
 
-        // Menggunakan userId untuk memfilter transaksi
         String sql = "SELECT * FROM transaksi WHERE userId = ?";
 
-        try (PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setInt(1, userId); // Mengatur userId yang sedang login
-            System.out.println("User  ID: " + userId); // Debugging
-
-            try (ResultSet rs = pst.executeQuery()) {
-                tbl.setRowCount(0); // Kosongkan model tabel
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/database_buku", "root", "Anangnaz"); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                tbl.setRowCount(0);
 
                 while (rs.next()) {
                     String judulBuku = rs.getString("judulBuku");
@@ -152,16 +150,14 @@ public class History extends javax.swing.JFrame {
                     int quantity = rs.getInt("Quantity");
                     int jumlahbayar = rs.getInt("jumlahBayar");
 
-                    // Menambahkan baris ke model tabel
                     tbl.addRow(new Object[]{judulBuku, author, harga, quantity, jumlahbayar});
                 }
             }
 
-            // Mengaitkan model dengan JTable
-            tblData.setModel(tbl); // Pastikan tblData adalah objek JTable yang sudah ada
+            tblData.setModel(tbl);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error saat mengambil data: " + e.getMessage());
-            e.printStackTrace(); // Untuk debugging
+            e.printStackTrace();
         }
     }
 
