@@ -100,21 +100,20 @@ public class admin extends javax.swing.JFrame {
 
         String cari = txtCari.getText();
 
-        // Menggunakan placeholder (?) untuk parameter
         String sql = "SELECT * FROM buku WHERE judulBuku LIKE ? OR Author LIKE ? OR Harga LIKE ? OR Quantity LIKE ?";
 
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             String searchPattern = "%" + cari + "%";
-            pstmt.setString(1, searchPattern); // Untuk judul buku
-            pstmt.setString(2, searchPattern); // Untuk author
-            pstmt.setString(3, searchPattern); // Untuk harga
-            pstmt.setString(4, searchPattern); // Untuk quantity
+            pstmt.setString(1, searchPattern);
+            pstmt.setString(2, searchPattern);
+            pstmt.setString(3, searchPattern);
+            pstmt.setString(4, searchPattern);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     tbl.addRow(new Object[]{
                         rs.getString("ID"),
-                        rs.getString("judulBuku"), // Pastikan nama kolom sesuai
+                        rs.getString("judulBuku"),
                         rs.getString("Author"),
                         rs.getString("Harga"),
                         rs.getString("Quantity")
@@ -122,7 +121,7 @@ public class admin extends javax.swing.JFrame {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Ganti dengan logging yang sesuai
+            e.printStackTrace();
         }
 
         tblData.setModel(tbl);
@@ -211,6 +210,7 @@ public class admin extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         txtCari = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -324,6 +324,13 @@ public class admin extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("History Penjualan");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout kGradientPanel2Layout = new javax.swing.GroupLayout(kGradientPanel2);
         kGradientPanel2.setLayout(kGradientPanel2Layout);
         kGradientPanel2Layout.setHorizontalGroup(
@@ -337,8 +344,10 @@ public class admin extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(673, Short.MAX_VALUE))
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5)))
+                .addContainerGap(534, Short.MAX_VALUE))
             .addGroup(kGradientPanel2Layout.createSequentialGroup()
                 .addGroup(kGradientPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(kGradientPanel2Layout.createSequentialGroup()
@@ -404,7 +413,8 @@ public class admin extends javax.swing.JFrame {
                         .addGroup(kGradientPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton5)))
                     .addGroup(kGradientPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -573,6 +583,12 @@ public class admin extends javax.swing.JFrame {
         caridata();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        this.dispose();
+        HistoryAdmin historyAdmin = new HistoryAdmin();
+        historyAdmin.setVisible(true);    
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -615,6 +631,7 @@ public class admin extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
