@@ -175,17 +175,16 @@ public class Login extends javax.swing.JFrame {
 
             pst.setString(1, txtNama.getText());
             String hashedPassword = hashPassword(txtPassword.getText());
-            pst.setString(2, hashedPassword); 
+            pst.setString(2, hashedPassword);
 
             java.sql.ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-               
+
                 int userId = rs.getInt("id");
 
-                String userName = rs.getString("Nama"); // Ambil nama dari ResultSet
+                String userName = rs.getString("Nama");
 
-                // Cek apakah pengguna adalah admin
                 if (txtNama.getText().equals("admin")) {
                     this.dispose();
                     new admin().setVisible(true);
@@ -213,8 +212,6 @@ public class Login extends javax.swing.JFrame {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = md.digest(password.getBytes());
-
-            // Mengonversi byte array ke string heksadesimal
             StringBuilder sb = new StringBuilder();
             for (byte b : hashedBytes) {
                 sb.append(String.format("%02x", b));
@@ -225,7 +222,7 @@ public class Login extends javax.swing.JFrame {
             return null;
         }
     }
-
+    
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed

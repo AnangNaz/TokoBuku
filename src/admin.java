@@ -90,6 +90,44 @@ public class admin extends javax.swing.JFrame {
         }
     }
 
+    void caridata() {
+        DefaultTableModel tbl = new DefaultTableModel();
+        tbl.addColumn("ID");
+        tbl.addColumn("Judul Buku");
+        tbl.addColumn("Author");
+        tbl.addColumn("Harga");
+        tbl.addColumn("Quantity");
+
+        String cari = txtCari.getText();
+
+        // Menggunakan placeholder (?) untuk parameter
+        String sql = "SELECT * FROM buku WHERE judulBuku LIKE ? OR Author LIKE ? OR Harga LIKE ? OR Quantity LIKE ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            String searchPattern = "%" + cari + "%";
+            pstmt.setString(1, searchPattern); // Untuk judul buku
+            pstmt.setString(2, searchPattern); // Untuk author
+            pstmt.setString(3, searchPattern); // Untuk harga
+            pstmt.setString(4, searchPattern); // Untuk quantity
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    tbl.addRow(new Object[]{
+                        rs.getString("ID"),
+                        rs.getString("judulBuku"), // Pastikan nama kolom sesuai
+                        rs.getString("Author"),
+                        rs.getString("Harga"),
+                        rs.getString("Quantity")
+                    });
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Ganti dengan logging yang sesuai
+        }
+
+        tblData.setModel(tbl);
+    }
+
     void update() {
         System.out.println(imgPath);
         if (imgPath == null) {
@@ -109,17 +147,17 @@ public class admin extends javax.swing.JFrame {
                 throw new IllegalStateException("Text fields are not initialized.");
             }
 
-            pst.setString(1, txtjudulBuku.getText()); 
+            pst.setString(1, txtjudulBuku.getText());
             pst.setString(2, txtAuthor.getText());
-            pst.setInt(3, Integer.parseInt(txtHarga.getText())); 
-            pst.setInt(4, Integer.parseInt(txtQuantity.getText())); 
+            pst.setInt(3, Integer.parseInt(txtHarga.getText()));
+            pst.setInt(4, Integer.parseInt(txtQuantity.getText()));
 
             if (imgPath == null) {
                 throw new IllegalStateException("Image path is not set. Please select an image.");
             }
             InputStream img = new FileInputStream(imgPath);
-            pst.setBlob(5, img); 
-            pst.setInt(6, Integer.parseInt(txtid.getText())); 
+            pst.setBlob(5, img);
+            pst.setInt(6, Integer.parseInt(txtid.getText()));
 
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
@@ -171,6 +209,8 @@ public class admin extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        txtCari = new javax.swing.JTextField();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -277,6 +317,13 @@ public class admin extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Cari");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout kGradientPanel2Layout = new javax.swing.GroupLayout(kGradientPanel2);
         kGradientPanel2.setLayout(kGradientPanel2Layout);
         kGradientPanel2Layout.setHorizontalGroup(
@@ -291,7 +338,7 @@ public class admin extends javax.swing.JFrame {
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(673, Short.MAX_VALUE))
             .addGroup(kGradientPanel2Layout.createSequentialGroup()
                 .addGroup(kGradientPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(kGradientPanel2Layout.createSequentialGroup()
@@ -314,8 +361,13 @@ public class admin extends javax.swing.JFrame {
                             .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Bcover, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 280, Short.MAX_VALUE))
+                .addGroup(kGradientPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(kGradientPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(57, 57, 57)
+                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         kGradientPanel2Layout.setVerticalGroup(
             kGradientPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,8 +405,13 @@ public class admin extends javax.swing.JFrame {
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(95, Short.MAX_VALUE))
+                    .addGroup(kGradientPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(kGradientPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton3)
+                            .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(1540, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -362,19 +419,16 @@ public class admin extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(kGradientPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(8, 8, 8))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 264, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(759, 759, 759))
+            .addComponent(kGradientPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(kGradientPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(781, 781, 781))
         );
@@ -502,7 +556,7 @@ public class admin extends javax.swing.JFrame {
 
             String path = selectedFile.getAbsolutePath();
             Bcover.setIcon(ResizeCover(path, null));
-            imgPath = path; 
+            imgPath = path;
             System.out.println(path);
         } else if (result == JFileChooser.CANCEL_OPTION) {
             JOptionPane.showMessageDialog(this, "No file selected");
@@ -514,6 +568,10 @@ public class admin extends javax.swing.JFrame {
     private void browsebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browsebtnActionPerformed
         imageChooser();
     }//GEN-LAST:event_browsebtnActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        caridata();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -555,6 +613,7 @@ public class admin extends javax.swing.JFrame {
     private javax.swing.JButton browsebtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
@@ -568,6 +627,7 @@ public class admin extends javax.swing.JFrame {
     private keeptoo.KGradientPanel kGradientPanel2;
     private javax.swing.JTable tblData;
     private javax.swing.JTextField txtAuthor;
+    private javax.swing.JTextField txtCari;
     private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtQuantity;
     private javax.swing.JTextField txtid;
